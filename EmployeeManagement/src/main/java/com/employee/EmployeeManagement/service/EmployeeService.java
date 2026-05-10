@@ -17,6 +17,6 @@ public interface EmployeeService {
       EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO);
       EmployeeResponseDTO getEmployeeById(Long empId);
      Page<EmployeeListDTO> getAllEmployees(Pageable pageable);
-     Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType, Pageable pageable);
+     Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType, String empName,Pageable pageable);
 
 }

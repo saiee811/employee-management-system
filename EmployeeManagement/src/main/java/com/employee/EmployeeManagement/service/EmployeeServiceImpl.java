@@ -61,12 +61,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType, Pageable pageable) {
+    public Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType,String empName, Pageable pageable) {
         Specification<EmployeeEntity> spec = Specification.where(null);
         spec = spec.and(EmployeeSpecification.hasStatus(status));
         spec = spec.and(EmployeeSpecification.hasDepartment(departmentId));
         spec = spec.and(EmployeeSpecification.hasDesignation(designation));
         spec = spec.and(EmployeeSpecification.hasEmploymentType(employmentType));
+        spec = spec.and(EmployeeSpecification.hasEmpName(empName));
         Page<EmployeeEntity> employeeEntities = employeeRepository.findAll(spec,pageable);
         return employeeEntities.map(employeeMapper::toListDTO);
     }

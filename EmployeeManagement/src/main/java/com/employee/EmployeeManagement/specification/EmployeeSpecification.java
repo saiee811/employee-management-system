@@ -42,4 +42,12 @@ public class EmployeeSpecification {
             return criteriaBuilder.equal(root.get("employmentType"),employmentType);
         };
     }
+    public static Specification<EmployeeEntity> hasEmpName(String empName){
+        return (root, query, criteriaBuilder) -> {
+            if(empName==null){
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("empName"),empName);
+        };
+    }
 }

@@ -44,11 +44,13 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<EmployeeListDTO>>> getAllEmployeesByFilter(@RequestParam(required = false) EmployeeStatus employeeStatus,
+    public ResponseEntity<ApiResponse<Page<EmployeeListDTO>>> getAllEmployeesByFilter(@RequestParam EmployeeStatus employeeStatus,
                                                                                       @RequestParam(required = false) Long departmentId,
                                                                                       @RequestParam(required = false) String designation,
-                                                                                      @RequestParam(required = false) EmploymentType employmentType, @PageableDefault(size = 10, sort = "empName") Pageable pageable) {
-        Page<EmployeeListDTO> employeeListDTOS = employeeService.getEmployeesUsingFilter(employeeStatus, departmentId, designation, employmentType, pageable);
+                                                                                      @RequestParam(required = false) EmploymentType employmentType,
+                                                                                      @RequestParam(required = false) String empName,
+                                                                                      @PageableDefault(size = 10, sort = "empName") Pageable pageable) {
+        Page<EmployeeListDTO> employeeListDTOS = employeeService.getEmployeesUsingFilter(employeeStatus, departmentId, designation, employmentType,empName,pageable);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employees fetched successfully", employeeListDTOS));
     }
 }
