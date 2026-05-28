@@ -4,6 +4,9 @@ import com.employee.EmployeeManagement.enums.EmployeeStatus;
 import com.employee.EmployeeManagement.enums.EmploymentType;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

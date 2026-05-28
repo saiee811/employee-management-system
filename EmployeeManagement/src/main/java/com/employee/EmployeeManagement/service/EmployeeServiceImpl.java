@@ -3,6 +3,7 @@ package com.employee.EmployeeManagement.service;
 import com.employee.EmployeeManagement.dto.EmployeeListDTO;
 import com.employee.EmployeeManagement.dto.EmployeeRequestDTO;
 import com.employee.EmployeeManagement.dto.EmployeeResponseDTO;
+import com.employee.EmployeeManagement.dto.EmployeeUpdateRequestDTO;
 import com.employee.EmployeeManagement.entity.DepartmentEntity;
 import com.employee.EmployeeManagement.entity.EmployeeEntity;
 import com.employee.EmployeeManagement.enums.EmployeeStatus;
@@ -21,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
@@ -30,7 +29,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final EmployeeMapper employeeMapper;
-
     @Override
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
         if (employeeRepository.existsByEmail(employeeRequestDTO.getEmail())) {
@@ -51,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeResponseDTO getEmployeeById(Long empId) {
-        EmployeeEntity employeeEntity = employeeRepository.getEmployeeDetails(empId).orElseThrow(()->new EmployeeNotFoundException("Employee not found with empId :"+empId));
+        EmployeeEntity employeeEntity = employeeRepository.getEmployeeDetails(empId).orElseThrow(() -> new EmployeeNotFoundException("Employee not found with empId :" + empId));
         return employeeMapper.toDTO(employeeEntity);
     }
 
@@ -61,16 +59,49 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType,String empName, Pageable pageable) {
+    public Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType, String empName, Pageable pageable) {
         Specification<EmployeeEntity> spec = Specification.where(null);
         spec = spec.and(EmployeeSpecification.hasStatus(status));
         spec = spec.and(EmployeeSpecification.hasDepartment(departmentId));
         spec = spec.and(EmployeeSpecification.hasDesignation(designation));
         spec = spec.and(EmployeeSpecification.hasEmploymentType(employmentType));
         spec = spec.and(EmployeeSpecification.hasEmpName(empName));
-        Page<EmployeeEntity> employeeEntities = employeeRepository.findAll(spec,pageable);
+        Page<EmployeeEntity> employeeEntities = employeeRepository.findAll(spec, pageable);
         return employeeEntities.map(employeeMapper::toListDTO);
     }
 
+    @Override
+    public EmployeeResponseDTO updateEmployeeDetails(Long empId, EmployeeUpdateRequestDTO employeeUpdateRequestDTO) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(empId).orElseThrow(() -> new EmployeeNotFoundException("Employee with this empId does not exists"));
+        if (employeeUpdateRequestDTO.getDesignation() != null) {
+            employeeEntity.setDesignation(employeeUpdateRequestDTO.getDesignation());
+        }
+        if (employeeUpdateRequestDTO.getDepartmentId() != null) {
+            DepartmentEntity departmentEntity = departmentRepository.findById(employeeUpdateRequestDTO.getDepartmentId()).orElseThrow(() -> new DepartmentNotFoundException("This department does not exits"));
+            employeeEntity.setDepartment(departmentEntity);
+        }
+        if (employeeUpdateRequestDTO.getPhoneNo() != null) {
+            employeeEntity.setPhoneNo(employeeUpdateRequestDTO.getPhoneNo());
+        }
+        if (employeeUpdateRequestDTO.getSalary() != null){
+            if(employeeUpdateRequestDTO.getSalary().signum() < 0){
+                throw new IllegalArgumentException("Salary cannot be negative");
+            }
+            employeeEntity.setSalary(employeeUpdateRequestDTO.getSalary());
+        }
+        if (employeeUpdateRequestDTO.getEmploymentType() != null) {
+            employeeEntity.setEmploymentType(employeeUpdateRequestDTO.getEmploymentType());
+        }
+        if (employeeUpdateRequestDTO.getManagerId() != null) {
+            if (empId.equals(employeeUpdateRequestDTO.getManagerId())) {
+                throw new IllegalArgumentException("Employee cannot be his own manager");
+            }
+            EmployeeEntity managerEntity = employeeRepository.findById(employeeUpdateRequestDTO.getManagerId()).orElseThrow(() -> new EmployeeNotFoundException("Manager not found!"));
+            employeeEntity.setManager(managerEntity);
+        }
 
+        EmployeeEntity updatedEmployeeEntity = employeeRepository.save(employeeEntity);
+        return employeeMapper.toDTO(updatedEmployeeEntity);
+    }
+    
 }

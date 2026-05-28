@@ -28,10 +28,10 @@ public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    Long empId;
+    private Long empId;
     @NotBlank
     @Column(name = "employee_name",nullable = false)
-    String empName;
+    private String empName;
 
     @NotBlank
     @Email
@@ -55,7 +55,7 @@ public class EmployeeEntity {
     @Column(name = "salary",precision = 10,scale = 2, nullable = false)
     @NotNull
     @Positive
-    BigDecimal salary;
+    private BigDecimal salary;
 
     @Column(name = "bonus", precision = 10, scale = 2)
     private BigDecimal bonus;

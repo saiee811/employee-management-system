@@ -4,6 +4,7 @@ import com.employee.EmployeeManagement.common.ApiResponse;
 import com.employee.EmployeeManagement.dto.EmployeeListDTO;
 import com.employee.EmployeeManagement.dto.EmployeeRequestDTO;
 import com.employee.EmployeeManagement.dto.EmployeeResponseDTO;
+import com.employee.EmployeeManagement.dto.EmployeeUpdateRequestDTO;
 import com.employee.EmployeeManagement.enums.EmployeeStatus;
 import com.employee.EmployeeManagement.enums.EmploymentType;
 import com.employee.EmployeeManagement.service.EmployeeService;
@@ -23,27 +24,27 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @PostMapping
+    @PostMapping("/createEmployee")
     public ResponseEntity<ApiResponse<EmployeeResponseDTO>> createEmployee(@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         EmployeeResponseDTO employeeResponseDTO = employeeService.createEmployee(employeeRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Employee Profile created successfully!", employeeResponseDTO
         ));
     }
 
-    @GetMapping("/{empId}")
+    @GetMapping("getEmployeeDetails/{empId}")
     public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeDetails(@PathVariable Long empId) {
         EmployeeResponseDTO employeeResponseDTO = employeeService.getEmployeeById(empId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee fetched successfully", employeeResponseDTO));
 
     }
 
-    @GetMapping("/")
+    @GetMapping("/getAllEmployees")
     public ResponseEntity<ApiResponse<Page<EmployeeListDTO>>> getAllEmployees(@PageableDefault(size = 10, page = 0, sort = "empName") Pageable pageable) {
         Page<EmployeeListDTO> employeeListDTO = employeeService.getAllEmployees(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employees fetched successfully", employeeListDTO));
     }
 
-    @GetMapping
+    @GetMapping("getEmployeesByFilter")
     public ResponseEntity<ApiResponse<Page<EmployeeListDTO>>> getAllEmployeesByFilter(@RequestParam EmployeeStatus employeeStatus,
                                                                                       @RequestParam(required = false) Long departmentId,
                                                                                       @RequestParam(required = false) String designation,
@@ -52,5 +53,12 @@ public class EmployeeController {
                                                                                       @PageableDefault(size = 10, sort = "empName") Pageable pageable) {
         Page<EmployeeListDTO> employeeListDTOS = employeeService.getEmployeesUsingFilter(employeeStatus, departmentId, designation, employmentType,empName,pageable);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employees fetched successfully", employeeListDTOS));
+    }
+
+    @PutMapping("updateEmployee/{empId}")
+    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> updateEmployeeDetails(@PathVariable Long empId,@Valid @RequestBody EmployeeUpdateRequestDTO employeeUpdateRequestDTO){
+        EmployeeResponseDTO employeeResponseDTO = employeeService.updateEmployeeDetails(empId,employeeUpdateRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee Details updated successfully",employeeResponseDTO));
+
     }
 }
