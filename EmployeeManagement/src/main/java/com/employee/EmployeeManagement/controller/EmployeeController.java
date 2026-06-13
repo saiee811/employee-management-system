@@ -57,6 +57,7 @@ public class EmployeeController {
 
     @PutMapping("updateEmployee/{empId}")
     public ResponseEntity<ApiResponse<EmployeeResponseDTO>> updateEmployeeDetails(@PathVariable Long empId,@Valid @RequestBody EmployeeUpdateRequestDTO employeeUpdateRequestDTO){
+        System.out.println("Inside update employee API");
         EmployeeResponseDTO employeeResponseDTO = employeeService.updateEmployeeDetails(empId,employeeUpdateRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee Details updated successfully",employeeResponseDTO));
 

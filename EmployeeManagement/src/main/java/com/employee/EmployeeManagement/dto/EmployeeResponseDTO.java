@@ -14,7 +14,7 @@ public class EmployeeResponseDTO {
     private String empName;
     private String email;
     private String phoneNo;
-    private String departmentName; // 👈 not object
+    private String departmentName;
     private String designation;
     private EmploymentType employmentType;
     private EmployeeStatus status;

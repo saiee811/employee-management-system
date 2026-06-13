@@ -3,6 +3,7 @@ package com.employee.EmployeeManagement.controller;
 import com.employee.EmployeeManagement.common.ApiResponse;
 import com.employee.EmployeeManagement.dto.EmployeeExperienceRequestDTO;
 import com.employee.EmployeeManagement.dto.EmployeeExperienceResponseDTO;
+import com.employee.EmployeeManagement.dto.EmployeeExperienceUpdateDTO;
 import com.employee.EmployeeManagement.service.EmployeeExperienceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,12 @@ public class EmployeeExperienceController {
         EmployeeExperienceResponseDTO employeeExperienceResponseDTO = employeeExperienceService.addEmployeeExperience(empId,employeeExperienceRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Employee experience added successfully",employeeExperienceResponseDTO));
 
+    }
+
+    @PutMapping("/{empId}/experiences/{expId}")
+    public ResponseEntity<ApiResponse<EmployeeExperienceResponseDTO>> updateEmployeeExperience(@PathVariable Long expId, @PathVariable Long empId, @RequestBody EmployeeExperienceUpdateDTO employeeExperienceUpdateDTO){
+        EmployeeExperienceResponseDTO employeeExperienceResponseDTO = employeeExperienceService.updateEmployeeExperience(expId,empId,employeeExperienceUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee experience updated successfully",employeeExperienceResponseDTO));
     }
 
 

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 public interface DepartmentService {
 
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentResponseDTO);
+    public DepartmentResponseDTO updateDepartment(Long id,DepartmentRequestDTO departmentRequestDTO);
 }

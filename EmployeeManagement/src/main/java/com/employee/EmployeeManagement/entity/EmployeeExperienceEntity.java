@@ -14,7 +14,8 @@ import java.time.LocalDate;
 @ToString
 @Table(name="employee_experience",
         indexes = {
-
+                @Index(name = "idx_employee_experience_employee",
+                        columnList = "employee_id")
         }
 )
 @Entity
@@ -24,13 +25,13 @@ public class EmployeeExperienceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔗 Link to employee
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     private EmployeeEntity employee;
 
     @NotBlank
-    @Column(name = "company_name", nullable = false)
+    @Column(name = "company_name", nullable = false, length = 150)
     private String companyName;
 
     @NotNull
@@ -40,6 +41,6 @@ public class EmployeeExperienceEntity {
     @Column(name = "exit_date")
     private LocalDate exitDate;
 
-    @Column(name = "designation")
+    @Column(name = "designation", length = 100)
     private String designation;
 }

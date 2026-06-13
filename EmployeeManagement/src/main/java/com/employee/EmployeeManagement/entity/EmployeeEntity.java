@@ -61,7 +61,6 @@ public class EmployeeEntity {
     private BigDecimal bonus;
 
     @Column(name="joining_date_current_org",nullable = false)
-    @PastOrPresent
     LocalDate joiningDateCurrentOrg;
 
     @Column(name = "created_at", updatable = false)
