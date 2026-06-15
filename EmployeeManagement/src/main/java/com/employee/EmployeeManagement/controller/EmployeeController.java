@@ -1,10 +1,7 @@
 package com.employee.EmployeeManagement.controller;
 
 import com.employee.EmployeeManagement.common.ApiResponse;
-import com.employee.EmployeeManagement.dto.EmployeeListDTO;
-import com.employee.EmployeeManagement.dto.EmployeeRequestDTO;
-import com.employee.EmployeeManagement.dto.EmployeeResponseDTO;
-import com.employee.EmployeeManagement.dto.EmployeeUpdateRequestDTO;
+import com.employee.EmployeeManagement.dto.*;
 import com.employee.EmployeeManagement.enums.EmployeeStatus;
 import com.employee.EmployeeManagement.enums.EmploymentType;
 import com.employee.EmployeeManagement.service.EmployeeService;
@@ -62,8 +59,8 @@ public class EmployeeController {
 
     }
     @PutMapping("updateEmployeeStatus/{empId}")
-    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> deactivateEmployee(@PathVariable Long empId,@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO){
-        EmployeeResponseDTO employeeResponseDTO = employeeService.deactivateEmployee(empId,employeeRequestDTO);
+    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> deactivateEmployee(@PathVariable Long empId,@Valid @RequestBody EmployeeStatusUpdateDTO EmployeeStatusUpdateDTO){
+        EmployeeResponseDTO employeeResponseDTO = employeeService.deactivateEmployee(empId,EmployeeStatusUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee Details updated successfully",employeeResponseDTO));
 
     }

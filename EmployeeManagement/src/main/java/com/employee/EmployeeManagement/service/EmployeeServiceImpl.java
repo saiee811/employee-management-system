@@ -101,6 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDTO(updatedEmployeeEntity);
     }
 
+
     public EmployeeResponseDTO deactivateEmployee(Long id, EmployeeStatusUpdateDTO employeeStatusUpdateDTO){
         EmployeeEntity employeeEntity = employeeRepository.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee not found"));
         if(employeeEntity.getStatus()==EmployeeStatus.INACTIVE){
