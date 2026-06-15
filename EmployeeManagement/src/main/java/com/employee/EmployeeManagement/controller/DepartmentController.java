@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/departments")
@@ -29,5 +31,20 @@ public class DepartmentController {
         return  ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Department Data updated successfull",departmentResponseDTO));
     }
 
+    @GetMapping("department/{id}")
+    public ResponseEntity<ApiResponse<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id){
+        DepartmentResponseDTO departmentResponseDTO = departmentService.getDepartmentById(id);
+        return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse<>("Department Found",departmentResponseDTO));
+    }
+    @GetMapping("/departments")
+    public ResponseEntity<ApiResponse<List<DepartmentResponseDTO>>> getAllDepartments(){
+        List<DepartmentResponseDTO> departmentResponseDTO = departmentService.getAllDepartments();
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Departments fetched successfully",departmentResponseDTO));
+    }
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<String>> deleteDepartment(Long id){
+        departmentService.deleteDepartment(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Department deleted successfully",null));
+    }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,4 +34,5 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>,
     LEFT JOIN e.department d
 """)
    public Page<EmployeeListDTO> getAllEmployees(Pageable pageable);
+    Boolean existsByDepartmentId(Long id);
 }

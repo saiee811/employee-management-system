@@ -24,5 +24,6 @@ public interface EmployeeService {
     Page<EmployeeListDTO> getEmployeesUsingFilter(EmployeeStatus status, Long departmentId, String designation, EmploymentType employmentType, String empName, Pageable pageable);
 
     EmployeeResponseDTO updateEmployeeDetails(Long empId, EmployeeUpdateRequestDTO employeeUpdateRequestDTO);
+    EmployeeResponseDTO deactivateEmployee(Long id, EmployeeRequestDTO employeeRequestDTO);
 
 }

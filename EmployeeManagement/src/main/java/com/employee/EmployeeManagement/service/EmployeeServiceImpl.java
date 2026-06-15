@@ -1,9 +1,6 @@
 package com.employee.EmployeeManagement.service;
 
-import com.employee.EmployeeManagement.dto.EmployeeListDTO;
-import com.employee.EmployeeManagement.dto.EmployeeRequestDTO;
-import com.employee.EmployeeManagement.dto.EmployeeResponseDTO;
-import com.employee.EmployeeManagement.dto.EmployeeUpdateRequestDTO;
+import com.employee.EmployeeManagement.dto.*;
 import com.employee.EmployeeManagement.entity.DepartmentEntity;
 import com.employee.EmployeeManagement.entity.EmployeeEntity;
 import com.employee.EmployeeManagement.enums.EmployeeStatus;
@@ -102,6 +99,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeEntity updatedEmployeeEntity = employeeRepository.save(employeeEntity);
         return employeeMapper.toDTO(updatedEmployeeEntity);
+    }
+
+    public EmployeeResponseDTO deactivateEmployee(Long id, EmployeeStatusUpdateDTO employeeStatusUpdateDTO){
+        EmployeeEntity employeeEntity = employeeRepository.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee not found"));
+        if(employeeEntity.getStatus()==EmployeeStatus.INACTIVE){
+           throw new IllegalArgumentException("Employee is already INACTIVE in the system");
+        }else{
+            employeeEntity.setStatus(employeeStatusUpdateDTO.getStatus());
+        }
+        EmployeeEntity updatedEmployeeStatus = employeeRepository.save(employeeEntity);
+        return employeeMapper.toDTO(updatedEmployeeStatus);
+
     }
     
 }

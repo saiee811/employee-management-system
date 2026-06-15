@@ -12,6 +12,8 @@ import com.employee.EmployeeManagement.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeExperienceServiceImpl implements EmployeeExperienceService{
@@ -60,4 +62,15 @@ public class EmployeeExperienceServiceImpl implements EmployeeExperienceService{
         return employeeExperienceMapper.toDTO(employeeExperiences);
 
     }
+    // TODO: Fix employeeId mapping in EmployeeExperienceMapper
+    public List<EmployeeExperienceResponseDTO> getEmployeeExperiences(Long empId){
+        EmployeeEntity employeeEntity = employeeRepository.findById(empId).orElseThrow(()->new EmployeeNotFoundException("Employee not found with empId : + empId)"));
+        List<EmployeeExperienceEntity> employeeExperienceEntityList = employeeExperienceRepository.findAllByEmployeeEmpId(empId);
+        return employeeExperienceEntityList.stream().map(employeeExperienceMapper::toDTO).toList();
+    }
+    public void deleteExperience(Long expId, Long empId){
+        EmployeeExperienceEntity employeeExperienceEntity = employeeExperienceRepository.findByIdAndEmployeeEmpId(expId,empId).orElseThrow(()->new EmployeeNotFoundException("Experience not found"));
+        employeeExperienceRepository.delete(employeeExperienceEntity);
+    }
+
 }
