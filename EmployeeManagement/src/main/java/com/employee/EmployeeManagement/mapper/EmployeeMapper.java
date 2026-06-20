@@ -20,6 +20,7 @@ public interface EmployeeMapper {
     EmployeeEntity toEntity(EmployeeRequestDTO dto);
 
     @Mapping(source = "department.name", target = "departmentName")
+    @Mapping(source = "manager.empId", target = "managerId")
     EmployeeListDTO toListDTO(EmployeeEntity employee);
 
 }

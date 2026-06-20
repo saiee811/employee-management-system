@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
@@ -112,6 +114,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeEntity updatedEmployeeStatus = employeeRepository.save(employeeEntity);
         return employeeMapper.toDTO(updatedEmployeeStatus);
 
+    }
+
+    public  List<EmployeeListDTO> getReportees(Long managerId){
+        List<EmployeeEntity> employeeEntity = employeeRepository.findByManagerEmpId(managerId);
+        return employeeEntity.stream().map(employeeMapper::toListDTO).toList();
     }
     
 }

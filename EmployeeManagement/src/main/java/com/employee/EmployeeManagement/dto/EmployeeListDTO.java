@@ -17,4 +17,5 @@ public class EmployeeListDTO {
     private String departmentName;
     private String designation;
     private EmployeeStatus status;
+    private Long managerId;
 }

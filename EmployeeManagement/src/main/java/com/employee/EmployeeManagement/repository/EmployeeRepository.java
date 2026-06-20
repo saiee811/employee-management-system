@@ -28,11 +28,13 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>,
         e.phoneNo,
         d.name,
         e.designation,
-        e.status
+        e.status,
+        e.manager.empId
     )
     FROM EmployeeEntity e
     LEFT JOIN e.department d
 """)
-   public Page<EmployeeListDTO> getAllEmployees(Pageable pageable);
+   Page<EmployeeListDTO> getAllEmployees(Pageable pageable);
     Boolean existsByDepartmentId(Long id);
+    List<EmployeeEntity> findByManagerEmpId(Long id);
 }

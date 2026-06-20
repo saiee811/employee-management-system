@@ -22,5 +22,6 @@ public interface EmployeeService {
 
     EmployeeResponseDTO updateEmployeeDetails(Long empId, EmployeeUpdateRequestDTO employeeUpdateRequestDTO);
     EmployeeResponseDTO deactivateEmployee(Long id, EmployeeStatusUpdateDTO employeeStatusUpdateDTO);
+    List<EmployeeListDTO> getReportees(Long managerId);
 
 }

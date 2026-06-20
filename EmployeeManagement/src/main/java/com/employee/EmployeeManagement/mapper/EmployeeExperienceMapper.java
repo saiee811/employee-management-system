@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface EmployeeExperienceMapper {
 
-    //@Mapping(source = "employee.empId", target = "employeeId")
+    @Mapping(source = "employee.empId", target = "employeeId")
     EmployeeExperienceResponseDTO toDTO(EmployeeExperienceEntity employeeExperienceEntity);
 
     @Mapping(target = "employee", ignore = true)

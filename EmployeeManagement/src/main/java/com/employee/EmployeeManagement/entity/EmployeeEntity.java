@@ -96,5 +96,4 @@ public class EmployeeEntity {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmployeeExperienceEntity> experiences;
 
-
 }

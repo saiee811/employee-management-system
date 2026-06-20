@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/employees")
 @RequiredArgsConstructor
@@ -63,5 +65,10 @@ public class EmployeeController {
         EmployeeResponseDTO employeeResponseDTO = employeeService.deactivateEmployee(empId,EmployeeStatusUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Employee Details updated successfully",employeeResponseDTO));
 
+    }
+    @GetMapping("getReportees/{empId}")
+    public ResponseEntity<ApiResponse<List<EmployeeListDTO>>> getReportees(@PathVariable Long empId){
+        List<EmployeeListDTO> employeeListDTOS = employeeService.getReportees(empId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Reportess Found",employeeListDTOS));
     }
 }
