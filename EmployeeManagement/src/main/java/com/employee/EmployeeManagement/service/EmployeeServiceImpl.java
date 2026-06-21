@@ -14,6 +14,9 @@ import com.employee.EmployeeManagement.repository.DepartmentRepository;
 import com.employee.EmployeeManagement.repository.EmployeeRepository;
 import com.employee.EmployeeManagement.specification.EmployeeSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final EmployeeMapper employeeMapper;
+    
     @Override
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
         if (employeeRepository.existsByEmail(employeeRequestDTO.getEmail())) {
@@ -47,6 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Cacheable(value = "employees", key = "#empId")
     public EmployeeResponseDTO getEmployeeById(Long empId) {
         EmployeeEntity employeeEntity = employeeRepository.getEmployeeDetails(empId).orElseThrow(() -> new EmployeeNotFoundException("Employee not found with empId :" + empId));
         return employeeMapper.toDTO(employeeEntity);
@@ -70,6 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @CachePut(value = "employees", key = "#empId")
     public EmployeeResponseDTO updateEmployeeDetails(Long empId, EmployeeUpdateRequestDTO employeeUpdateRequestDTO) {
         EmployeeEntity employeeEntity = employeeRepository.findById(empId).orElseThrow(() -> new EmployeeNotFoundException("Employee with this empId does not exists"));
         if (employeeUpdateRequestDTO.getDesignation() != null) {
@@ -103,7 +109,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDTO(updatedEmployeeEntity);
     }
 
-
+    @Override
+    @CacheEvict(value = "employees", key = "#id")
     public EmployeeResponseDTO deactivateEmployee(Long id, EmployeeStatusUpdateDTO employeeStatusUpdateDTO){
         EmployeeEntity employeeEntity = employeeRepository.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee not found"));
         if(employeeEntity.getStatus()==EmployeeStatus.INACTIVE){
@@ -115,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.toDTO(updatedEmployeeStatus);
 
     }
-
+    @Override
     public  List<EmployeeListDTO> getReportees(Long managerId){
         List<EmployeeEntity> employeeEntity = employeeRepository.findByManagerEmpId(managerId);
         return employeeEntity.stream().map(employeeMapper::toListDTO).toList();

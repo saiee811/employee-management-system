@@ -39,8 +39,8 @@ public class EmployeeExperienceController {
     }
 
     @DeleteMapping("/{empId}/deleteEmployee/{expId}")
-    public ResponseEntity<ApiResponse<String>> deleteExperience(@PathVariable Long empId, @PathVariable Long expId){
-        employeeExperienceService.deleteExperience(empId,expId);
+    public ResponseEntity<ApiResponse<String>> deleteExperience(@PathVariable Long expId, @PathVariable Long empId){
+        employeeExperienceService.deleteExperience(expId,empId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("Experience deleted successfully",null));
     }
 
